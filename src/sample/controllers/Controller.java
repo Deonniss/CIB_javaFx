@@ -2,7 +2,6 @@ package sample.controllers;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.util.Properties;
 
 import javafx.fxml.FXML;
@@ -11,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import logic.diffiHelman.DiffiHelman;
+import logic.numberHandler.IntegerHandler;
 
 public class Controller {
 
@@ -65,7 +65,6 @@ public class Controller {
         clickButton();
     }
 
-
     private void clickButton() {
 
         button.setOnAction(event -> {
@@ -93,33 +92,16 @@ public class Controller {
 
                 labelCalcKey1.setText(property.getProperty("labelCalcKey1") + key1);
             } else {
-                new Alert(Alert.AlertType.INFORMATION, "This is an error!").showAndWait();
+                new Alert(Alert.AlertType.INFORMATION, property.getProperty("informationAlert")).showAndWait();
             }
         });
     }
 
     private boolean checkValidation() {
-        return checkInt(textFieldA.getText())
-                && checkInt(textFieldC.getText())
-                && checkSimple(textFieldC.getText())
-                && checkInt(textFieldB1.getText())
-                && checkInt(textFieldB2.getText());
-    }
-
-    private boolean checkInt(String str) {
-        try {
-            return Integer.parseInt(str) > 0;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
-    private boolean checkSimple(String str) {
-        try {
-            BigInteger a = new BigInteger(str);
-            return a.isProbablePrime((int) Math.log(Integer.parseInt(str)));
-        } catch (NullPointerException e) {
-            return false;
-        }
+        return IntegerHandler.checkInt(textFieldA.getText())
+                && IntegerHandler.checkInt(textFieldC.getText())
+                && IntegerHandler.checkSimple(textFieldC.getText())
+                && IntegerHandler.checkInt(textFieldB1.getText())
+                && IntegerHandler.checkInt(textFieldB2.getText());
     }
 }

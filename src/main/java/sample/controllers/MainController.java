@@ -1,14 +1,12 @@
 package sample.controllers;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -21,8 +19,6 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import logic.diffiHelman.DiffiHelman;
-import logic.numberHandler.IntegerHandler;
 import logic.propertyHandler.PropertyHandler;
 import sample.services.DiffiHelmanService;
 
@@ -33,9 +29,6 @@ public class MainController implements Initializable {
 
     @FXML
     private Button btnPrac3;
-
-    @FXML
-    private Button buttonDiffiHelman;
 
     @FXML
     private Label labelCalcKey1DiffiHelman;
@@ -112,6 +105,13 @@ public class MainController implements Initializable {
         }
     }
 
+    /**
+     * Закрытие приложения
+     */
+    public void close() {
+        Platform.exit();
+        System.exit(0);
+    }
 
     /**
      * Исполнение ДХ

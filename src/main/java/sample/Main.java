@@ -15,6 +15,14 @@ public class Main extends Application {
         primaryStage.setTitle("DenIvan app");
         primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.setScene(new Scene(root));
+
+        root.setOnMousePressed(pressEvent -> {
+            root.setOnMouseDragged(dragEvent -> {
+                primaryStage.setX(dragEvent.getScreenX() - pressEvent.getSceneX());
+                primaryStage.setY(dragEvent.getScreenY() - pressEvent.getSceneY());
+            });
+        });
+
         primaryStage.show();
     }
 

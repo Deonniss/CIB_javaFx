@@ -1,4 +1,4 @@
-package logic.propertyHandler;
+package logic.algorithmDiffiHelman.propertyHandler;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -10,7 +10,7 @@ public class PropertyHandler {
 
     static {
         try {
-            FileInputStream fis = new FileInputStream("src/main/resources/beginTitle/title.properties");  //"beginTitle/title.properties");
+            FileInputStream fis = new FileInputStream("src/main/resources/beginTitle/title.properties");
             property.load(fis);
         } catch (IOException e) {
             e.printStackTrace();

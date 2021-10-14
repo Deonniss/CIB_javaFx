@@ -1,7 +1,7 @@
 package sample.services;
 
-import logic.diffiHelman.DiffiHelman;
-import logic.numberHandler.IntegerHandler;
+import logic.algorithmDiffiHelman.diffiHelman.DiffiHelman;
+import logic.algorithmDiffiHelman.numberHandler.IntegerHandler;
 
 public class DiffiHelmanService {
 

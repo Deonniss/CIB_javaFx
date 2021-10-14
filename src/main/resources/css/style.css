@@ -13,3 +13,50 @@
     -fx-background-color : #6897CB;
     -fx-background-radius: 0;
 }
+
+.list-view .list-cell:odd {
+    -fx-background-color: #6897CB;
+}
+
+.list-view .list-cell:even {
+    -fx-background-color: #909090;
+}
+
+.list-view .list-cell:selected:odd,
+.list-view .list-cell:selected:even {
+    -fx-background-color: -fx-background;
+}
+
+#skStart.button
+{
+    -fx-background-color : #134276;
+    -fx-background-radius: 0;
+}
+#skStart.button:hover
+{
+    -fx-background-color : #1D63B1;
+    -fx-background-radius: 0;
+}
+#skStart.button:pressed
+{
+    -fx-background-color : #6897CB;
+    -fx-background-radius: 0;
+}
+
+#skNext.button
+{
+    -fx-background-color : #134276;
+    -fx-background-radius: 0;
+}
+#skNext.button:hover
+{
+    -fx-background-color : #1D63B1;
+    -fx-background-radius: 0;
+}
+#skNext.button:pressed
+{
+    -fx-background-color : #6897CB;
+    -fx-background-radius: 0;
+}
+
+/*#b.button :*/

@@ -1,4 +1,4 @@
-package logic.numberHandler;
+package logic.algorithmDiffiHelman.numberHandler;
 
 import java.math.BigInteger;
 

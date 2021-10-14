@@ -8,19 +8,18 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import logic.propertyHandler.PropertyHandler;
+import logic.algorithmDiffiHelman.propertyHandler.PropertyHandler;
 import sample.services.DiffiHelmanService;
+import sample.services.SKeyService;
 
 public class MainController implements Initializable {
 
@@ -28,7 +27,13 @@ public class MainController implements Initializable {
     private Button btnDiffiHelman;
 
     @FXML
-    private Button btnPrac3;
+    private Button btnNextStep;
+
+    @FXML
+    private Button btnSKEY;
+
+    @FXML
+    private Button btnStartSKEY;
 
     @FXML
     private Label labelCalcKey1DiffiHelman;
@@ -52,10 +57,25 @@ public class MainController implements Initializable {
     private Label labelStatusAlgName;
 
     @FXML
+    private Label labelxn1;
+
+    @FXML
     private Pane paneStatus;
 
     @FXML
     private Pane paneDiffiHelman;
+
+    @FXML
+    private Pane paneSKEY;
+
+    @FXML
+    private TextField textFieldNumberInputs;
+
+    @FXML
+    private TextField textFieldLastHash;
+
+    @FXML
+    private TextField textFieldPassword;
 
     @FXML
     private TextField textFieldADiffiHelman;
@@ -69,11 +89,21 @@ public class MainController implements Initializable {
     @FXML
     private TextField textFieldCDiffiHelman;
 
+    @FXML
+    private ListView<String> listMD5Client;
+
+    @FXML
+    private Label labelStatusAuth;
+
+    @FXML
+    private Label labelStatusPassword;
+
     private List<Pane> listActivity;
 
 
     /**
      * Init метод
+     *
      * @param location
      * @param resources
      */
@@ -81,10 +111,86 @@ public class MainController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         listActivity = new ArrayList<>();
         listActivity.add(paneDiffiHelman);
+        listActivity.add(paneSKEY);
+    }
+
+    @FXML
+    public void eventStartSKey(ActionEvent event) {
+
+        listMD5Client.getItems().clear();
+
+        if (checkValidationStartSKey()) {
+            String[] hashes = SKeyService.calculateHashes(textFieldPassword.getText(),
+                    Integer.parseInt(textFieldNumberInputs.getText()));
+
+            listMD5Client.getItems().addAll(hashes);
+
+            labelStatusAuth.setVisible(false);
+            labelStatusPassword.setVisible(false);
+            labelxn1.setText(PropertyHandler.getProperty().getProperty("labelxn1")
+                    + SKeyService.getActualValue());
+        } else {
+            labelStatusPassword.setVisible(true);
+            labelStatusPassword.setTextFill(Color.rgb(255, 107, 104));
+            new Alert(Alert.AlertType.INFORMATION,
+                    PropertyHandler.getProperty().getProperty("informationAlertStartSKey")).showAndWait();
+        }
+    }
+
+    @FXML
+    public void eventNextStepSKey(ActionEvent event) {
+
+        labelStatusAuth.setVisible(true);
+        if (checkValidationNextStepSKey()) {
+            labelStatusAuth.setText("authorization is successful!");
+            labelStatusAuth.setTextFill(Color.rgb(88, 150, 78));
+
+            List<String> currentList = new ArrayList<>(SKeyService.getAllElements());
+            String actualValue = currentList.get(currentList.size() - 1);
+
+            listMD5Client.getItems().clear();
+            currentList.remove(currentList.size() - 1);
+
+            if (currentList.size() == 0) {
+                labelStatusPassword.setVisible(true);
+            }
+
+            listMD5Client.getItems().addAll(currentList);
+            SKeyService.replaceActualValue(actualValue);
+            SKeyService.setAllElements(currentList);
+            textFieldLastHash.setText("");
+
+            labelxn1.setText(PropertyHandler.getProperty().getProperty("labelxn1")
+                    + SKeyService.getActualValue());
+
+        } else {
+            labelStatusAuth.setText("invalid password!");
+            labelStatusAuth.setTextFill(Color.rgb(255, 107, 104));
+        }
     }
 
     /**
+     * Проверяет правильность введенных значений ДХ
+     *
+     * @return
+     */
+    private boolean checkValidationStartSKey() {
+        return SKeyService.checkValidationInteger(textFieldNumberInputs.getText());
+    }
+
+    /**
+     * Проверяет правильность введенных значений ДХ
+     *
+     * @return
+     */
+    private boolean checkValidationNextStepSKey() {
+        return SKeyService.checkValidationEquals(textFieldLastHash.getText());
+    }
+
+
+    /**
      * переключение окон
+     *
      * @param event
      */
     @FXML
@@ -99,9 +205,10 @@ public class MainController implements Initializable {
             paneDiffiHelman.setVisible(true);
 
 
-        } else if (event.getSource() == btnPrac3) {
-            labelStatusAlgName.setText("3 Practies");
+        } else if (event.getSource() == btnSKEY) {
+            labelStatusAlgName.setText("S/KEY");
             listActivity.forEach(e -> e.setVisible(false));
+            paneSKEY.setVisible(true);
         }
     }
 
@@ -115,10 +222,11 @@ public class MainController implements Initializable {
 
     /**
      * Исполнение ДХ
+     *
      * @param event
      */
     @FXML
-    void eventDiffiHelman(ActionEvent event) {
+    public void eventDiffiHelman(ActionEvent event) {
 
         if (checkValidationDiffiHelman()) {
 
@@ -143,12 +251,14 @@ public class MainController implements Initializable {
 
             labelCalcKey1DiffiHelman.setText(PropertyHandler.getProperty().getProperty("labelCalcKey1") + key1);
         } else {
-            new Alert(Alert.AlertType.INFORMATION, PropertyHandler.getProperty().getProperty("informationAlert")).showAndWait();
+            new Alert(Alert.AlertType.INFORMATION,
+                    PropertyHandler.getProperty().getProperty("informationAlertDiffiHelman")).showAndWait();
         }
     }
 
     /**
      * Проверяет правильность введенных значений ДХ
+     *
      * @return
      */
     private boolean checkValidationDiffiHelman() {

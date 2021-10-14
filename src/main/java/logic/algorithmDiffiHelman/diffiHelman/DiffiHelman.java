@@ -1,4 +1,4 @@
-package logic.diffiHelman;
+package logic.algorithmDiffiHelman.diffiHelman;
 
 import java.math.BigInteger;
 

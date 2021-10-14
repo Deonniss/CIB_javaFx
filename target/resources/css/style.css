@@ -13,3 +13,27 @@
     -fx-background-color : #6897CB;
     -fx-background-radius: 0;
 }
+
+.list-view .scroll-bar:vertical .thumb {
+    -fx-background-color: #134276;
+}
+
+.list-view {
+    -fx-background-color: #fff;
+}
+
+.list-view .list-cell:odd {
+    -fx-background-color: #025F8D;
+    -fx-text-fill: #fff;
+}
+
+.list-view .list-cell:even {
+    -fx-background-color: #004F7B;
+    -fx-text-fill: #fff;
+
+}
+
+/*.list-view .list-cell:selected:odd,*/
+/*.list-view .list-cell:selected:even {*/
+/*    -fx-background-color: -fx-background;*/
+/*}*/

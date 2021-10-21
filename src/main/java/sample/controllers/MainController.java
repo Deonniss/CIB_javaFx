@@ -1,6 +1,8 @@
 package sample.controllers;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 
@@ -12,6 +14,8 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -34,6 +38,9 @@ public class MainController implements Initializable {
 
     @FXML
     private Button btnStartSKEY;
+
+    @FXML
+    private Button btnCopy;
 
     @FXML
     private Label labelCalcKey1DiffiHelman;
@@ -142,6 +149,7 @@ public class MainController implements Initializable {
 
         labelStatusAuth.setVisible(true);
         if (checkValidationNextStepSKey()) {
+
             labelStatusAuth.setText("authorization is successful!");
             labelStatusAuth.setTextFill(Color.rgb(88, 150, 78));
 
@@ -166,6 +174,20 @@ public class MainController implements Initializable {
         } else {
             labelStatusAuth.setText("invalid password!");
             labelStatusAuth.setTextFill(Color.rgb(255, 107, 104));
+        }
+    }
+
+    @FXML
+    public void eventCopy(ActionEvent event) {
+
+        Clipboard clipboard = Clipboard.getSystemClipboard();
+
+        ClipboardContent content = new ClipboardContent();
+
+        List<String> hashes = SKeyService.getAllElements();
+        if (hashes != null && hashes.size() != 0) {
+            content.putString(hashes.get(hashes.size() - 1));
+            clipboard.setContent(content);
         }
     }
 

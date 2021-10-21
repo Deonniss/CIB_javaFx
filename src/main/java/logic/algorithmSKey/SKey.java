@@ -8,7 +8,7 @@ public class SKey {
     public static String md5(String str) {
         String hash = "undefined";
         try {
-            MessageDigest digest = MessageDigest.getInstance("MD5");
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] bytes = digest.digest(str.getBytes());
             StringBuilder builder = new StringBuilder();
             for (byte item : bytes) {

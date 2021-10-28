@@ -1,19 +1,23 @@
 package sample.controllers;
 
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 
+import java.math.BigInteger;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.Background;
@@ -21,9 +25,15 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import logic.algorithmDiffiHelman.excelExp.ExcelExport;
+import logic.algorithmDiffiHelman.numberHandler.IntegerHandler;
 import logic.algorithmDiffiHelman.propertyHandler.PropertyHandler;
+import logic.algorithmFFS.CalculatorFFS;
+import logic.algorithmFFS.entity.VectorLink;
 import sample.services.DiffiHelmanService;
 import sample.services.SKeyService;
+
+import static javafx.scene.control.cell.TextFieldTableCell.*;
 
 public class MainController implements Initializable {
 
@@ -41,6 +51,18 @@ public class MainController implements Initializable {
 
     @FXML
     private Button btnCopy;
+
+    @FXML
+    private Button btnFFS;
+
+    @FXML
+    private Button btnGenProb;
+
+    @FXML
+    private Button btnCalcFFS;
+
+    @FXML
+    private Button btnCalcFFSTable;
 
     @FXML
     private Label labelCalcKey1DiffiHelman;
@@ -76,6 +98,9 @@ public class MainController implements Initializable {
     private Pane paneSKEY;
 
     @FXML
+    private Pane paneFFS;
+
+    @FXML
     private TextField textFieldNumberInputs;
 
     @FXML
@@ -97,16 +122,68 @@ public class MainController implements Initializable {
     private TextField textFieldCDiffiHelman;
 
     @FXML
+    private TextField textFieldP;
+
+    @FXML
+    private TextField textFieldQ;
+
+    @FXML
+    private TextField textFieldI;
+
+    @FXML
+    private TextField textFieldSizePQ;
+
+    @FXML
+    private TextField textFieldSizeSR;
+
+    @FXML
     private ListView<String> listMD5Client;
 
     @FXML
     private Label labelStatusAuth;
 
     @FXML
+    private Label labelStatusAuthFFS;
+
+    @FXML
     private Label labelStatusPassword;
+
+    @FXML
+    private Label labelNFFS;
+
+    @FXML
+    private CheckBox checkHaveKey;
+
+    @FXML
+    private TableView<VectorLink> tableSR;
+
+    @FXML
+    private TableColumn<VectorLink, String> columnR;
+
+    @FXML
+    private TableColumn<VectorLink, String> columnS;
+
+    @FXML
+    private TableColumn<VectorLink, String> columnE;
+
+    @FXML
+    private TableColumn<VectorLink, String> columnV;
+
+    @FXML
+    private TableColumn<VectorLink, String> columnX;
+
+    @FXML
+    private TableColumn<VectorLink, String> columnXres;
+
+    @FXML
+    private TableColumn<VectorLink, String> columnYY;
+
+    @FXML
+    private TableColumn<VectorLink, String> columnY;
 
     private List<Pane> listActivity;
 
+    private ObservableList<VectorLink> links;
 
     /**
      * Init метод
@@ -119,7 +196,147 @@ public class MainController implements Initializable {
         listActivity = new ArrayList<>();
         listActivity.add(paneDiffiHelman);
         listActivity.add(paneSKEY);
+        listActivity.add(paneFFS);
     }
+
+    @FXML
+    public void editColumnS(TableColumn.CellEditEvent event) {
+
+        VectorLink vectorLink = tableSR.getSelectionModel().getSelectedItem();
+        vectorLink.setS((String) event.getNewValue());
+    }
+
+    @FXML
+    public void editColumnR(TableColumn.CellEditEvent event) {
+
+        VectorLink vectorLink = tableSR.getSelectionModel().getSelectedItem();
+        vectorLink.setR((String) event.getNewValue());
+    }
+
+    private ObservableList<VectorLink> getEmptyCollect(int n) {
+        ObservableList<VectorLink> links = FXCollections.observableArrayList();
+
+        for (int i = 0; i < n; i++) {
+
+            if (IntegerHandler.checkInt(textFieldSizeSR.getText())) {
+                links.add(new VectorLink(
+                        IntegerHandler.generateProbablyPrime(Integer.parseInt(textFieldSizeSR.getText())),
+                        IntegerHandler.generateProbablyPrime(Integer.parseInt(textFieldSizeSR.getText()))));
+            }
+        }
+
+        return links;
+    }
+
+    @FXML
+    public void eventCalcFFSTable(ActionEvent event) {
+
+        Random random = new Random();
+
+        for (int i = 0; i < links.size(); i++) {
+            VectorLink v = new VectorLink();
+            VectorLink current = links.get(i);
+
+            v.setS(current.getS());
+            v.setR(current.getR());
+
+            v.setV(CalculatorFFS.calcV(v.getS()));
+            v.setX(CalculatorFFS.calcX(v.getR()));
+            v.setE(random.nextDouble() >= 0.5 ? "1" : "0");
+
+            if (checkHaveKey.isSelected()) {
+                v.setY(CalculatorFFS.calcY(v.getR(), v.getS(), v.getE()));
+            } else {
+                v.setY(CalculatorFFS.calcY(v.getR(), v.getS(), "0"));
+            }
+
+            v.setRes(CalculatorFFS.calcXRes(v.getX(), v.getV(), v.getE()));
+            v.setYy(CalculatorFFS.calcYy(v.getY()));
+
+            links.set(i, v);
+        }
+        boolean perm = true;
+        for (VectorLink vectorLink : links) {
+            if (!vectorLink.getYy().equals(vectorLink.getRes())) {
+                perm = false;
+                break;
+            }
+        }
+
+        if (perm) {
+            labelStatusAuthFFS.setText("Аутентификация пройдена!");
+            labelStatusAuthFFS.setTextFill(Color.rgb(88, 150, 78));
+        } else {
+            labelStatusAuthFFS.setText("Аутентификация провалена!");
+            labelStatusAuthFFS.setTextFill(Color.rgb(255, 107, 104));
+        }
+
+        tableSR.setItems(links);
+    }
+
+    @FXML
+    public void eventGenProbablyPrime(ActionEvent event) {
+
+        if (IntegerHandler.checkInt(textFieldSizePQ.getText())) {
+            textFieldP.setText(IntegerHandler.generateProbablyPrime(Integer.parseInt(textFieldSizePQ.getText())));
+            textFieldQ.setText(IntegerHandler.generateProbablyPrime(Integer.parseInt(textFieldSizePQ.getText())));
+        }
+    }
+
+    @FXML
+    public void eventExportExcel(ActionEvent event) {
+
+        ExcelExport<VectorLink> excelExport = new ExcelExport<>();
+        excelExport.export(tableSR);
+    }
+
+
+    @FXML
+    public void eventCalcFFS(ActionEvent event) {
+
+        if (IntegerHandler.checkBigInt(textFieldP.getText())
+                && IntegerHandler.checkBigInt(textFieldQ.getText())
+                && IntegerHandler.checkInt(textFieldI.getText())
+                && IntegerHandler.checkSimpleBigInt((textFieldP.getText()))
+                && IntegerHandler.checkSimpleBigInt((textFieldQ.getText()))) {
+
+            BigInteger bi = new BigInteger(textFieldP.getText()).multiply(new BigInteger(textFieldQ.getText()));
+            labelNFFS.setText(bi.toString());
+            CalculatorFFS.setN(bi.toString());
+
+            links = getEmptyCollect(Integer.parseInt(textFieldI.getText()));
+
+            columnR.setCellValueFactory(new PropertyValueFactory<>("r"));
+            columnS.setCellValueFactory(new PropertyValueFactory<>("s"));
+
+            columnV.setCellValueFactory(new PropertyValueFactory<>("v"));
+            columnX.setCellValueFactory(new PropertyValueFactory<>("x"));
+            columnY.setCellValueFactory(new PropertyValueFactory<>("y"));
+            columnE.setCellValueFactory(new PropertyValueFactory<>("e"));
+            columnXres.setCellValueFactory(new PropertyValueFactory<>("res"));
+            columnYY.setCellValueFactory(new PropertyValueFactory<>("yy"));
+
+
+            tableSR.setItems(links);
+
+            tableSR.setEditable(true);
+            columnR.setEditable(true);
+            columnS.setEditable(true);
+
+            columnE.setEditable(true);
+            columnV.setEditable(true);
+            columnX.setEditable(true);
+            columnXres.setEditable(true);
+            columnY.setEditable(true);
+            columnYY.setEditable(true);
+
+            columnR.setCellFactory(TextFieldTableCell.forTableColumn());
+            columnS.setCellFactory(TextFieldTableCell.forTableColumn());
+        } else {
+            System.out.println("error!");
+        }
+    }
+
 
     @FXML
     public void eventStartSKey(ActionEvent event) {
@@ -226,11 +443,16 @@ public class MainController implements Initializable {
             listActivity.forEach(e -> e.setVisible(false));
             paneDiffiHelman.setVisible(true);
 
-
         } else if (event.getSource() == btnSKEY) {
             labelStatusAlgName.setText("S/KEY");
             listActivity.forEach(e -> e.setVisible(false));
             paneSKEY.setVisible(true);
+
+        } else if (event.getSource() == btnFFS) {
+            labelStatusAlgName.setText("Feig-Fiat-Shamir Protocol");
+            listActivity.forEach(e -> e.setVisible(false));
+            paneFFS.setVisible(true);
+
         }
     }
 

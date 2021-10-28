@@ -40,5 +40,13 @@
             <artifactId>fontawesomefx-fontawesome</artifactId>
             <version>4.7.0-9.1.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.9</version>
+        </dependency>
     </dependencies>
+
+
+
 </project>

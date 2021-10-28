@@ -1,6 +1,7 @@
 package logic.algorithmDiffiHelman.numberHandler;
 
 import java.math.BigInteger;
+import java.util.Random;
 
 public class IntegerHandler {
 
@@ -19,5 +20,25 @@ public class IntegerHandler {
         } catch (NullPointerException e) {
             return false;
         }
+    }
+
+    public static boolean checkBigInt(String str) {
+        try {
+            return str.matches("\\d+");
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    public static boolean checkSimpleBigInt(String str) {
+        try {
+            return new BigInteger(str).isProbablePrime(1);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    public static String generateProbablyPrime(int bits) {
+        return BigInteger.probablePrime(bits, new Random()).toString();
     }
 }

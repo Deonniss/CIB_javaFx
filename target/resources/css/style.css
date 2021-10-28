@@ -14,36 +14,97 @@
     -fx-background-radius: 0;
 }
 
-.list-view .scroll-bar:vertical .thumb {
-    -fx-background-color: #134276;
-}
-
-.list-view {
-    -fx-background-color: #fff;
-}
-
 .list-view .list-cell:odd {
-    -fx-background-color: #025F8D;
-    -fx-text-fill: #fff;
+    -fx-background-color: #6897CB;
 }
 
 .list-view .list-cell:even {
-    -fx-background-color: #004F7B;
-    -fx-text-fill: #fff;
+    -fx-background-color: #909090;
+}
 
+.list-view .list-cell:selected:odd,
+.list-view .list-cell:selected:even {
+    -fx-background-color: -fx-background;
+}
+
+#skStart.button
+{
+    -fx-background-color : #134276;
+    -fx-background-radius: 0;
+}
+#skStart.button:hover
+{
+    -fx-background-color : #1D63B1;
+    -fx-background-radius: 0;
+}
+#skStart.button:pressed
+{
+    -fx-background-color : #6897CB;
+    -fx-background-radius: 0;
+}
+
+#skNext.button
+{
+    -fx-background-color : #134276;
+    -fx-background-radius: 0;
+}
+#skNext.button:hover
+{
+    -fx-background-color : #1D63B1;
+    -fx-background-radius: 0;
+}
+#skNext.button:pressed
+{
+    -fx-background-color : #6897CB;
+    -fx-background-radius: 0;
 }
 
 
+/*#b.button :*/
 
+.table-view{
+    -fx-background-color: #333C50;
+}
 
+.table-view:focused{
+    -fx-background-color: #6897CB;
+}
 
+/* Spaltenk?pfe
+    Struktur column-header-background -> column-header */
 
+.table-view .column-header-background{
+    -fx-background-color: #202639;
+}
 
+.table-view .column-header-background .label{
+    -fx-background-color: #202639;
+    -fx-text-fill: #E2F6F7;
+    -fx-font-weight: bold;
+    -fx-font-size: 16;
+}
 
+.table-view .column-header {
+    -fx-background-color: #202639;
+}
 
+.table-view .table-cell{
+    -fx-text-fill: #D3D3D3;
+}
 
+.table-row-cell{
+    -fx-background-color: -fx-table-cell-border-color, #333C50;
+    -fx-text-fill: #D3D3D3;
+}
 
-/*.list-view .list-cell:selected:odd,*/
-/*.list-view .list-cell:selected:even {*/
-/*    -fx-background-color: -fx-background;*/
-/*}*/
+.table-row-cell:odd{
+    -fx-background-color: -fx-table-cell-border-color, #2B3445;
+    -fx-text-fill: #D3D3D3;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #456487;
+    -fx-background-insets: 0;
+    -fx-background-radius: 1;
+}
+

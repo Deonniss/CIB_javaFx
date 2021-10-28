@@ -2,9 +2,12 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
@@ -32,6 +35,14 @@
                   <Font size="22.0" />
                </font></Button>
             <Button fx:id="btnSKEY" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="61.0" prefWidth="259.0" stylesheets="@../../../resources/css/style.css" text="S/KEY" textFill="#f5f4f7">
+               <padding>
+                  <Insets left="50.0" />
+               </padding>
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Button>
+            <Button fx:id="btnFFS" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleClicks" prefHeight="61.0" prefWidth="259.0" stylesheets="@../../../resources/css/style.css" text="Feig-Fiat-Shamir Pr." textFill="#f5f4f7">
                <padding>
                   <Insets left="50.0" />
                </padding>
@@ -251,6 +262,77 @@
                   </Pane>
                </content>
             </ScrollPane>
+         </children>
+      </Pane>
+      <Pane fx:id="paneFFS" layoutX="259.0" layoutY="92.0" prefHeight="504.0" prefWidth="751.0">
+         <children>
+            <Label layoutX="28.0" layoutY="52.0" text="1) Введите p (большое простое число)" textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="28.0" layoutY="96.0" text="2) Введите q (большое простое число)" textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="28.0" layoutY="137.0" text="3) n = pq = " textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="28.0" layoutY="172.0" text="4) Введите i (количество значений в векторе)" textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="28.0" layoutY="205.0" text="5) Введите значения s (секрет) и r (случайное число))" textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <TableView fx:id="tableSR" editable="true" layoutX="6.0" layoutY="241.0" prefHeight="161.0" prefWidth="744.0" stylesheets="@../../../resources/css/style.css">
+              <columns>
+                <TableColumn fx:id="columnS" onEditCommit="#editColumnS" prefWidth="74.0" sortable="false" text="s" />
+                  <TableColumn fx:id="columnR" onEditCommit="#editColumnR" prefWidth="87.0" sortable="false" text="r" />
+                  <TableColumn fx:id="columnV" prefWidth="125.0" sortable="false" text="v" />
+                  <TableColumn fx:id="columnX" prefWidth="129.0" sortable="false" text="x" />
+                  <TableColumn fx:id="columnY" prefWidth="116.0" sortable="false" text="y" />
+                  <TableColumn fx:id="columnE" prefWidth="23.0" sortable="false" text="e" />
+                  <TableColumn fx:id="columnYY" prefWidth="91.0" sortable="false" text="y*y" />
+                  <TableColumn fx:id="columnXres" prefWidth="84.0" sortable="false" text="xv mod n" />
+              </columns>
+            </TableView>
+            <TextField fx:id="textFieldP" layoutX="365.0" layoutY="53.0" prefHeight="25.0" prefWidth="285.0" style="-fx-background-color: #3F4352; -fx-border-color: #F5F4F7; -fx-text-fill: #F5F4F7;" />
+            <TextField fx:id="textFieldQ" layoutX="365.0" layoutY="97.0" prefHeight="25.0" prefWidth="285.0" style="-fx-background-color: #3F4352; -fx-border-color: #F5F4F7; -fx-text-fill: #F5F4F7;" />
+            <TextField fx:id="textFieldI" layoutX="415.0" layoutY="173.0" prefHeight="27.0" prefWidth="96.0" style="-fx-background-color: #3F4352; -fx-border-color: #F5F4F7; -fx-text-fill: #F5F4F7;" />
+            <Button id="ffsBtn" fx:id="btnCalcFFS" layoutX="529.0" layoutY="173.0" mnemonicParsing="false" onAction="#eventCalcFFS" stylesheets="@../../../resources/css/style2.css" text="Вычислить s и r для i-х элементов" textFill="WHITE" />
+            <Label fx:id="labelNFFS" layoutX="124.0" layoutY="137.0" text="?" textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Button id="ffsBtn" fx:id="btnCalcFFSTable" layoutX="477.0" layoutY="208.0" mnemonicParsing="false" onAction="#eventCalcFFSTable" stylesheets="@../../../resources/css/style2.css" text="Выполнить рабочий этап" textFill="WHITE" />
+            <Button id="ffsBtn" fx:id="btnGenProb" layoutX="668.0" layoutY="78.0" mnemonicParsing="false" onAction="#eventGenProbablyPrime" stylesheets="@../../../resources/css/style2.css" text="Автоген" textFill="WHITE" />
+            <CheckBox fx:id="checkHaveKey" layoutX="650.0" layoutY="212.0" mnemonicParsing="false" text="Есть ключ" textFill="WHITE" />
+            <Label fx:id="labelStatusAuthFFS" layoutX="433.0" layoutY="422.0" prefHeight="27.0" prefWidth="266.0" textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="28.0" layoutY="415.0" text="Размер p, q в битах" textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <TextField fx:id="textFieldSizePQ" layoutX="262.0" layoutY="415.0" prefHeight="27.0" prefWidth="96.0" style="-fx-background-color: #3F4352; -fx-border-color: #F5F4F7; -fx-text-fill: #F5F4F7;" text="16" />
+            <Label layoutX="28.0" layoutY="456.0" text="Размер s и r в битах" textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <TextField fx:id="textFieldSizeSR" layoutX="262.0" layoutY="456.0" prefHeight="27.0" prefWidth="96.0" style="-fx-background-color: #3F4352; -fx-border-color: #F5F4F7; -fx-text-fill: #F5F4F7;" text="16" />
+            <Button id="ffsBtn" fx:id="btnExport" layoutX="620.0" layoutY="457.0" mnemonicParsing="false" onAction="#eventExportExcel" stylesheets="@../../../resources/css/style2.css" text="Экспорт" textFill="WHITE" />
          </children>
       </Pane>
    </children>

@@ -45,3 +45,19 @@
     -fx-background-color : #6897CB;
     -fx-background-radius: 0;
 }
+
+#ffsBtn.button
+{
+    -fx-background-color : #134276;
+    -fx-background-radius: 0;
+}
+#ffsBtn.button:hover
+{
+    -fx-background-color : #1D63B1;
+    -fx-background-radius: 0;
+}
+#ffsBtn.button:pressed
+{
+    -fx-background-color : #6897CB;
+    -fx-background-radius: 0;
+}
